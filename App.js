@@ -20,6 +20,7 @@ import ProductCard from './src/components/ProdutoCard';
 import FilterModal from './src/components/FiltroModal';
 import AppliedFilters from './src/components/FiltroAplicado';
 import ProductDetailScreen from './src/screens/ProdutoDetalhe';
+import BottomNavigation from './src/components/BottomNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,9 @@ function HomeScreen({ navigation }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOption, setSortOption] = useState('');
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+
+  // Estado da Aba Ativa da Navegação Inferior
+  const [currentTab, setCurrentTab] = useState('home');
 
   // 1. Carregar Categorias
   useEffect(() => {
@@ -84,6 +88,10 @@ function HomeScreen({ navigation }) {
     setSelectedCategory('all');
     setSortOption('');
     setSearchQuery('');
+  };
+
+  const handleTabPress = (tabId) => {
+    setCurrentTab(tabId);
   };
 
   // Contagem de filtros ativos para a badge do botão "Filtrar"
@@ -192,21 +200,11 @@ function HomeScreen({ navigation }) {
         onReset={handleResetFilters}
       />
 
-      {/* Barra de Navegação Inferior (Bottom Bar) */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Feather name="home" size={20} color="#4F46E5" />
-          <Text style={[styles.navLabel, styles.navLabelActive]}>Início</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Feather name="heart" size={20} color="#94A3B8" />
-          <Text style={styles.navLabel}>Favoritos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Feather name="user" size={20} color="#94A3B8" />
-          <Text style={styles.navLabel}>Perfil</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Barra de Navegação Inferior (Bottom Bar Funcional) */}
+      <BottomNavigation
+        activeTab={currentTab}
+        onTabPress={handleTabPress}
+      />
     </SafeAreaView>
   );
 }
@@ -284,7 +282,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 18,
     height: 18,
-    justifyContent: 'center',
+    justify: 'center',
     alignItems: 'center',
     marginLeft: 6,
   },
@@ -315,31 +313,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
+    justify: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.7)',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justify: 'space-around',
-    alignItems: 'center',
-    height: 58,
-    borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
-    backgroundColor: '#FFFFFF',
-  },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navLabel: {
-    fontSize: 11,
-    color: '#94A3B8',
-    marginTop: 2,
-    fontWeight: '500',
-  },
-  navLabelActive: {
-    color: '#4F46E5',
-    fontWeight: '700',
   },
 });
